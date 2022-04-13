@@ -1,0 +1,68 @@
+<mat-card>
+    <mat-card-title>
+        <h2 appTitulos>{{titulo}}</h2>
+    </mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="frm" (ngSubmit)="aplicar()">
+            <div *ngIf="curso.id!=0" class="col-sm-12">
+                <mat-form-field appearance="fill"  class="col-md-12">
+                    <mat-label>N&uacute;mero</mat-label>
+                    <input matInput formControlName="id" [(ngModel)]="curso.id" readonly>
+                  </mat-form-field>
+            </div>
+           
+        
+            <mat-form-field appearance="fill"  class="col-md-12">
+                <mat-label>Nombre</mat-label>
+             
+                <input type="text" formControlName="nombre" [(ngModel)]="curso.nombre" matInput>        
+                <mat-error *ngIf="frm.controls['nombre'].errors?.['required']">El campo Nombre es requerido</mat-error>
+                <mat-error *ngIf="frm.controls['nombre'].errors?.['minlength']">El campo Nombre debe tener al menos 3 caracteres</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill"  class="col-md-12">
+                <mat-label>Descripcion</mat-label>
+                <input matInput formControlName="descripcion" [(ngModel)]="curso.descripcion">
+                <mat-error *ngIf="frm.controls['descripcion'].errors?.['required']">El campo Descripci&oacute;n es requerido</mat-error>
+                <mat-error *ngIf="frm.controls['descripcion'].errors?.['minlength']">El campo Descripci&oacute;n debe tener al menos 3 caracteres</mat-error>
+            </mat-form-field>          
+
+            <div class="row">
+                <mat-form-field appearance="fill" class="col-md-6">
+                    <mat-label>Fecha de inicio</mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="fechaInicio" [(ngModel)]="curso.fechaInicio">
+                    <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
+                    <mat-datepicker #picker1 ></mat-datepicker>
+                    <mat-error *ngIf="frm.controls['fechaInicio'].errors?.['required']">El campo fecha de inicio es requerido</mat-error>
+                </mat-form-field>    
+
+                <mat-form-field appearance="fill"  class="col-md-3">
+                    <mat-label>Clases semanales</mat-label>
+                    <input matInput type="number" formControlName="clasesSemanales" [(ngModel)]="curso.clasesSemanales">
+                    <mat-error *ngIf="frm.controls['clasesSemanales'].errors?.['required']">El campo clases semanales es requerido</mat-error>                    
+                </mat-form-field>
+                <mat-form-field appearance="fill"  class="col-md-3">
+                    <mat-label>Total de clases</mat-label>
+                    <input matInput type="number" formControlName="totalClases" [(ngModel)]="curso.totalClases">
+                    <mat-error *ngIf="frm.controls['totalClases'].errors?.['required']">El campo total de clases es requerido</mat-error>                    
+                </mat-form-field>
+               
+        
+                                
+            </div>    
+
+            <mat-form-field appearance="fill" class="col-md-12">
+                <mat-label>Profesor designado</mat-label>
+                <mat-select formControlName="profesor" [(ngModel)]="curso.profesorId">
+                    <mat-option *ngFor="let pro of profesores" [value]="pro.id">{{pro.nombre}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="frm.controls['profesor'].errors?.['required']">El campo Profesor es requerido</mat-error>
+            </mat-form-field>
+            
+            <div class="col-sm-12 text-end">
+                <button type="submit" mat-raised-button color="primary">Confirmar</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+
+

@@ -1,0 +1,7 @@
+.nav-link{
+    color: antiquewhite !important;
+}
+.active{
+    color: aliceblue !important;
+    font-weight: bold;
+}

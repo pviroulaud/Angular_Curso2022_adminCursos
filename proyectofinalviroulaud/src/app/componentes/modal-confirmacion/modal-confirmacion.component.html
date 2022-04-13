@@ -1,0 +1,19 @@
+<mat-card>
+    <mat-card-title>
+        <h2>{{titulo}}</h2>
+    </mat-card-title>
+    <mat-card-subtitle>
+        <h3>{{subTitulo}}</h3>
+    </mat-card-subtitle>
+    <mat-card-content >
+        <div class="row">
+            <div class="col-sm-6">
+                <button mat-raised-button color="primary" (click)="confirma()">SI</button>
+            </div>
+            <div class="col-sm-6">
+                <button mat-raised-button color="warn" (click)="cerrar()">NO</button>
+            </div>
+        </div>
+        
+    </mat-card-content>
+</mat-card>
