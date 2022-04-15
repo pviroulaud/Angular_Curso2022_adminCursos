@@ -11,10 +11,10 @@ export class CursoService {
    
 
   constructor() {
-    this.listaCur = [ new Curso(1, "Curso1", "Descripcion1",100,3,2,new Date()),  
-    new Curso(2, "Curso2", "Descripcion2",100,3,2,new Date()),
-    new Curso(3, "Curso3", "Descripcion3",100,3,2,new Date()),
-    new Curso(4, "Curso4", "Descripcion4",100,3,2,new Date()),
+    this.listaCur = [ new Curso(1, "Curso1", "Descripcion1",100,3,2,new Date(),0),  
+    new Curso(2, "Curso2", "Descripcion2",100,3,2,new Date(),6),
+    new Curso(3, "Curso3", "Descripcion3",100,3,2,new Date(),7),
+    new Curso(4, "Curso4", "Descripcion4",100,3,2,new Date(),0),
     ];
    }
 

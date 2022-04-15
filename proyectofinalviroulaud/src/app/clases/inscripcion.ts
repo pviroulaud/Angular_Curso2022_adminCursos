@@ -10,7 +10,6 @@ export class Inscripcion
         this.id=id;
         this.idAlumno=idAlumno;
         this.idCurso=idCurso;
-        this.fechaInscripcion=fechaInscripcion;
-        
+        this.fechaInscripcion=fechaInscripcion;        
     }
 }

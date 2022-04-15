@@ -11,7 +11,7 @@ export class Curso
     fechaInicio:Date=new Date();
     cupo:number=0;
 
-    constructor(id:number,nombre:string,descripcion:string,cupo:number,totalClases:number,clasesSemanales:number,fechaInicio:Date)
+    constructor(id:number,nombre:string,descripcion:string,cupo:number,totalClases:number,clasesSemanales:number,fechaInicio:Date,profesorId:number)
     {
         this.id=id;
         this.nombre=nombre;
@@ -19,6 +19,8 @@ export class Curso
         this.clasesSemanales=clasesSemanales;
         this.fechaInicio=fechaInicio;
         this.cupo=cupo;        
+        this.profesorId=profesorId;
+        
         this.totalClases=this.clasesSemanales;        
     }
     setProfesor(profesor:Usuario){

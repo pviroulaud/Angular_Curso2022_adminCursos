@@ -1,104 +1,154 @@
-<mat-card>
-    <mat-card-title>
-        <h2 appTitulos>{{titulo}}</h2>
-    </mat-card-title>
-    <mat-card-content>
-        <form [formGroup]="frm" (ngSubmit)="aplicar()">
-            <div *ngIf="usuario.id!=0" class="col-sm-12">
-                <mat-form-field appearance="fill"  class="col-md-12">
-                    <mat-label>Legajo</mat-label>
-                    <input matInput formControlName="legajo" [(ngModel)]="usuario.id" readonly>
-                  </mat-form-field>
-            </div>
-           
-        
-            <div class="row">
-                <mat-form-field appearance="fill"  class="col-md-6">
-                    <mat-label>Nombre</mat-label>
-                 
-                    <input type="text" formControlName="nombre" [(ngModel)]="usuario.nombre" matInput>        
-                    <mat-error *ngIf="frm.controls['nombre'].errors?.['required']">El campo Nombre es requerido</mat-error>
-                    <mat-error *ngIf="frm.controls['nombre'].errors?.['minlength']">El campo Nombre debe tener al menos 3 caracteres</mat-error>
-                </mat-form-field>
-                <mat-form-field appearance="fill"  class="col-md-6">
-                    <mat-label>Apellido</mat-label>
-                    <input matInput formControlName="apellido" [(ngModel)]="usuario.apellido">
-                    <mat-error *ngIf="frm.controls['apellido'].errors?.['required']">El campo Nombre es requerido</mat-error>
-                    <mat-error *ngIf="frm.controls['apellido'].errors?.['minlength']">El campo Nombre debe tener al menos 3 caracteres</mat-error>
-                    </mat-form-field>             
-            </div>
-            <div class="row">
-                <mat-form-field appearance="fill"  class="col-md-6">
-                    <mat-label>DNI</mat-label>
-                    <input matInput type="number" formControlName="dni" [(ngModel)]="usuario.dni">
-                    <mat-error *ngIf="frm.controls['dni'].errors?.['required']">El campo DNI es requerido</mat-error>
-                    <mat-error *ngIf="frm.controls['dni'].errors?.['min'] || frm.controls['dni'].errors?.['max']">El n&uacute;mero de DNI no es v&aacute;lido</mat-error>
-                </mat-form-field>
-        
-                <mat-form-field appearance="fill" class="col-md-6">
-                    <mat-label>Sexo</mat-label>
-                    <mat-select formControlName="sexo" [(ngModel)]="usuario.sexo" >
-                        <mat-option value="0">Sin especificar</mat-option>
-                        <mat-option value="1">Masculino</mat-option>
-                        <mat-option value="2">Femenino</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="frm.controls['sexo'].errors?.['required']">El campo Sexo es requerido</mat-error>
-                </mat-form-field>
-                                
-            </div>
-        
-            <div class="row">        
-                <mat-form-field appearance="fill" class="col-md-6">
-                    <mat-label>Fecha de nacimiento</mat-label>
-                    <input matInput max="{{fechaMaxima}}" [matDatepicker]="picker1" formControlName="fechaNac" [(ngModel)]="usuario.fechaNacimiento">
-                    <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
-                    <mat-datepicker #picker1 ></mat-datepicker>
-                    <mat-error *ngIf="frm.controls['fechaNac'].errors?.['required']">El campo fecha de nacimiento es requerido</mat-error>
-                </mat-form-field>            
-        
-                <mat-form-field appearance="fill" class="col-md-6">
-                    <mat-label>Edad</mat-label>
-                    <input matInput value="{{usuario.fechaNacimiento | edad}}" readonly>
-                    </mat-form-field>
-            </div>
-        
-            <div class="row">
-        
-                <mat-form-field appearance="fill"  class="col-md-6">
-                    <mat-label>Correo electr&oacute;nico</mat-label>
-                    <input matInput type="mail" formControlName="email" [(ngModel)]="usuario.correoElectronico">
-                    <mat-error *ngIf="frm.controls['email'].errors?.['required']">El campo correo electr&oacute;nico es requerido</mat-error>
-                    <mat-error *ngIf="frm.controls['email'].errors?.['pattern']">El correo electr&oacute;nico no tiene el formato requerido</mat-error>
-                </mat-form-field>
-        
-        
-                <mat-form-field appearance="fill" class="col-md-6">
-                    <mat-label>Tel&eacute;fono</mat-label>
-                    <input matInput type="tel" formControlName="telefono" [(ngModel)]="usuario.telefono">
-                    </mat-form-field>
-                        
-            </div>
-        
-        
-            <mat-form-field appearance="fill" class="col-md-12">
-                <mat-label>Direcci&oacute;n</mat-label>
-                <input matInput formControlName="direccion" [(ngModel)]="usuario.direccion">
-                <mat-error *ngIf="frm.controls['direccion'].errors?.['required']">El campo correo electr&oacute;nico es requerido</mat-error>
-            </mat-form-field>
 
-            <mat-form-field appearance="fill" class="col-md-6">
-                <mat-label>Perfil</mat-label>
-                <mat-select formControlName="rol" [(ngModel)]="usuario.rol" >
-                    <mat-option *ngFor="let rol of roles" [value]="rol.id">{{rol.nombre}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="frm.controls['rol'].errors?.['required']">El campo Rol es requerido</mat-error>
-            </mat-form-field>
+<mat-dialog-content>
+    <mat-card>
+        <mat-card-title>
+            <h2 appTitulos>{{titulo}}</h2>
+        </mat-card-title>
+
+        <mat-card-content>
+
+            <form [formGroup]="frm" (ngSubmit)="aplicar()">
+                
+                <div *ngIf="usuario.id!=0" class="col-sm-12">
+                    <mat-form-field appearance="fill"  class="col-md-12">
+                        <mat-label>Legajo</mat-label>
+                        <input matInput formControlName="legajo" [(ngModel)]="usuario.id" readonly>
+                    </mat-form-field>
+                </div>
             
-            <div class="col-sm-12 text-end">
-                <button type="submit" mat-raised-button color="primary">Confirmar</button>
-            </div>
-        </form>
-    </mat-card-content>
-</mat-card>
+            
+                <div class="row">
+                    <mat-form-field appearance="fill"  class="col-md-6" >
+                        <mat-label>Nombre</mat-label>
+                    
+                        <input type="text" formControlName="nombre" [(ngModel)]="usuario.nombre" matInput [readonly]="soloLectura">        
+                        <mat-error *ngIf="frm.controls['nombre'].errors?.['required']">El campo Nombre es requerido</mat-error>
+                        <mat-error *ngIf="frm.controls['nombre'].errors?.['minlength']">El campo Nombre debe tener al menos 3 caracteres</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill"  class="col-md-6">
+                        <mat-label>Apellido</mat-label>
+                        <input matInput formControlName="apellido" [(ngModel)]="usuario.apellido" [readonly]="soloLectura">
+                        <mat-error *ngIf="frm.controls['apellido'].errors?.['required']">El campo Nombre es requerido</mat-error>
+                        <mat-error *ngIf="frm.controls['apellido'].errors?.['minlength']">El campo Nombre debe tener al menos 3 caracteres</mat-error>
+                        </mat-form-field>             
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="fill"  class="col-md-6">
+                        <mat-label>DNI</mat-label>
+                        <input matInput type="number" formControlName="dni" [(ngModel)]="usuario.dni" [readonly]="soloLectura">
+                        <mat-error *ngIf="frm.controls['dni'].errors?.['required']">El campo DNI es requerido</mat-error>
+                        <mat-error *ngIf="frm.controls['dni'].errors?.['min'] || frm.controls['dni'].errors?.['max']">El n&uacute;mero de DNI no es v&aacute;lido</mat-error>
+                    </mat-form-field>
+            
+                    <mat-form-field appearance="fill" class="col-md-6">
+                        <mat-label>Sexo</mat-label>
+                        <mat-select formControlName="sexo" [(ngModel)]="usuario.sexo" [disabled]="soloLectura">
+                            <mat-option value="0">Sin especificar</mat-option>
+                            <mat-option value="1">Masculino</mat-option>
+                            <mat-option value="2">Femenino</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="frm.controls['sexo'].errors?.['required']">El campo Sexo es requerido</mat-error>
+                    </mat-form-field>
+                                    
+                </div>
+            
+                <div class="row">        
+                    <mat-form-field appearance="fill" class="col-md-6">
+                        <mat-label>Fecha de nacimiento</mat-label>
+                        <input matInput max="{{fechaMaxima}}" [matDatepicker]="picker1" formControlName="fechaNac" [(ngModel)]="usuario.fechaNacimiento" [readonly]="soloLectura">
+                        <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
+                        <mat-datepicker #picker1 ></mat-datepicker>
+                        <mat-error *ngIf="frm.controls['fechaNac'].errors?.['required']">El campo fecha de nacimiento es requerido</mat-error>
+                    </mat-form-field>            
+            
+                    <mat-form-field appearance="fill" class="col-md-6">
+                        <mat-label>Edad</mat-label>
+                        <input matInput value="{{usuario.fechaNacimiento | edad}}" readonly>
+                        </mat-form-field>
+                </div>
+            
+                <div class="row">
+            
+                    <mat-form-field appearance="fill"  class="col-md-6">
+                        <mat-label>Correo electr&oacute;nico</mat-label>
+                        <input matInput type="mail" formControlName="email" [(ngModel)]="usuario.correoElectronico" [readonly]="soloLectura">
+                        <mat-error *ngIf="frm.controls['email'].errors?.['required']">El campo correo electr&oacute;nico es requerido</mat-error>
+                        <mat-error *ngIf="frm.controls['email'].errors?.['pattern']">El correo electr&oacute;nico no tiene el formato requerido</mat-error>
+                    </mat-form-field>
+            
+            
+                    <mat-form-field appearance="fill" class="col-md-6">
+                        <mat-label>Tel&eacute;fono</mat-label>
+                        <input matInput type="tel" formControlName="telefono" [(ngModel)]="usuario.telefono" [readonly]="soloLectura">
+                        </mat-form-field>
+                            
+                </div>
+            
+            
+                <mat-form-field appearance="fill" class="col-md-12">
+                    <mat-label>Direcci&oacute;n</mat-label>
+                    <input matInput formControlName="direccion" [(ngModel)]="usuario.direccion" [readonly]="soloLectura">
+                    <mat-error *ngIf="frm.controls['direccion'].errors?.['required']">El campo correo electr&oacute;nico es requerido</mat-error>
+                </mat-form-field>
 
+                <mat-form-field appearance="fill" class="col-md-6">
+                    <mat-label>Perfil</mat-label>
+                    <mat-select formControlName="rol" [(ngModel)]="usuario.rol" [disabled]="soloLectura">
+                        <mat-option *ngFor="let rol of roles" [value]="rol.id">{{rol.nombre}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="frm.controls['rol'].errors?.['required']">El campo Rol es requerido</mat-error>
+                </mat-form-field>
+                
+                <div class="col-sm-12">
+                    <mat-card>
+                        <mat-card-title>
+                            <h3>Cursos</h3>
+                        </mat-card-title>
+                        <mat-card-content>
+
+                            <mat-list>
+                                <mat-list-item *ngFor="let curso of usuario.cursos" style="list-style-type: none; border-bottom: solid 1px; ">
+                                    <div class="col-sm-8">
+                                        {{curso.nombre}}
+                                     </div>
+                                     <div class="col-sm-4 text-end">
+                                         <button mat-icon-button (click)="quitarCurso(usuario.id,curso.id)">
+                                             <mat-icon>delete</mat-icon>
+                                         </button>
+                                     </div>
+                                </mat-list-item>
+                            </mat-list>
+
+                            <div class="row px-1">
+                                <div class="col-sm-8 py-1">
+                                    <mat-form-field appearance="fill" class="col-md-12">
+                                        <mat-select formControlName="cursos">
+                                            <mat-option *ngFor="let c of cursosDisponibles" [value]="c.id">{{c.nombre}}</mat-option>
+                                        </mat-select>                                
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-4 py-1 px-1" text-end>
+                                    <button mat-raised-button color="primary" (click)="agregarCurso()">Inscribir al curso</button>
+                                </div>
+                            </div>
+
+                        </mat-card-content>
+                        <mat-card-footer>                            
+
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+            
+                <div class="col-sm-12 text-end py-2 px-2">
+                    <button type="submit" mat-raised-button color="primary">Confirmar</button>
+                </div>
+            </form>
+
+        </mat-card-content>
+
+        <mat-card-footer>
+           
+        </mat-card-footer>
+    </mat-card>
+</mat-dialog-content>
 

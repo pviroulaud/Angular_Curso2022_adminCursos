@@ -14,6 +14,7 @@ export class Usuario
     sexo:string="";
     direccion:string="";
     rol:number=4;
+    pass:string="123";
 
     constructor(id:number,nombre:string,
     apellido:string,
@@ -35,5 +36,10 @@ export class Usuario
         this.sexo=sexo;
         this.direccion=direccion
         this.rol=rol;
+    }
+
+    setContraseña(pass:string)
+    {
+        this.pass=pass;
     }
 }

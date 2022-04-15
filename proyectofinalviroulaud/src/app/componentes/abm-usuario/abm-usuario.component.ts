@@ -1,7 +1,10 @@
 import { Component, OnInit,Inject,ViewChild } from '@angular/core';
 import { Usuario } from '../../clases/usuario';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators, FormsModule } from '@angular/forms';
+import { Curso } from '../../clases/curso';
+import { CursoService } from 'src/app/servicios/curso.service';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
 
 
 @Component({
@@ -16,7 +19,8 @@ export class AbmUsuarioComponent implements OnInit {
   fechaMaxima:string="";
   edita:boolean=true;
   roles:any[]=[];
-  
+  soloLectura:boolean=false;
+  cursosDisponibles:Curso[]=[];
   
 
   frm:FormGroup=new FormGroup({
@@ -30,11 +34,13 @@ export class AbmUsuarioComponent implements OnInit {
     email:new FormControl('',[Validators.required,Validators.pattern(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/)]),
     telefono:new FormControl(''),
     direccion:new FormControl('',Validators.required),
-    rol:new FormControl('1',Validators.required)
+    rol:new FormControl('1',Validators.required),
+    cursos:new FormControl('0')
   });
 
-  constructor(public refDialog: MatDialogRef<AbmUsuarioComponent>, 
-              @Inject(MAT_DIALOG_DATA) public data:{datosUsr:Usuario,rolesPermitidos:any[]}) {
+
+  constructor(private servicioCursos:CursoService, private servicioUsuario:UsuarioService,public refDialog: MatDialogRef<AbmUsuarioComponent>, 
+              @Inject(MAT_DIALOG_DATA) public data:{datosUsr:Usuario,rolesPermitidos:any[],soloLectura:boolean}) {
     if (data.datosUsr.id==0)
     {
       this.titulo="Nuevo";
@@ -46,6 +52,8 @@ export class AbmUsuarioComponent implements OnInit {
     }
       this.usuario=data.datosUsr;
       this.roles=data.rolesPermitidos;
+      this.soloLectura=data.soloLectura;
+      this.cursosDisponibles=this.servicioCursos.getCursos();
    }
 
   ngOnInit(): void {
@@ -67,14 +75,25 @@ export class AbmUsuarioComponent implements OnInit {
     this.fechaMaxima=hoy.getFullYear().toString()+'-'+mes+'-'+dia  
   }
 
+  agregarCurso(){
+    let c=this.servicioCursos.getCurso(this.frm.value.cursos);
 
+    this.servicioUsuario.asignarCurso(this.usuario,c);
+
+  }
+  quitarCurso(alumnoId:number,cursoId:number){
+
+    this.servicioUsuario.desasignarCurso(this.usuario,this.servicioCursos.getCurso(cursoId)!);
+
+  }
 
   aplicar()
   {
+    
     if (this.frm.valid)
     {
       if (this.edita)
-      {
+      {        
         this.refDialog.close(this.usuario);
       }
       else

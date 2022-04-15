@@ -53,7 +53,7 @@
             <mat-form-field appearance="fill" class="col-md-12">
                 <mat-label>Profesor designado</mat-label>
                 <mat-select formControlName="profesor" [(ngModel)]="curso.profesorId">
-                    <mat-option *ngFor="let pro of profesores" [value]="pro.id">{{pro.nombre}}</mat-option>
+                    <mat-option *ngFor="let pro of profesores" [value]="pro.id">{{pro|apellidonombre}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="frm.controls['profesor'].errors?.['required']">El campo Profesor es requerido</mat-error>
             </mat-form-field>

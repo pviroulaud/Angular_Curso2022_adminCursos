@@ -17,6 +17,10 @@ import { AbmCursoComponent } from './componentes/abm-curso/abm-curso.component';
 import { AbmUsuarioComponent } from './componentes/abm-usuario/abm-usuario.component';
 import { UsuarioService } from './servicios/usuario.service';
 import { ListaUsuariosComponent } from './componentes/lista-usuarios/lista-usuarios.component';
+import { ListaInscripcionesComponent } from './componentes/lista-inscripciones/lista-inscripciones.component';
+import { AbmInscripcionComponent } from './componentes/abm-inscripcion/abm-inscripcion.component';
+import { CursoService } from './servicios/curso.service';
+import { RolesService } from './servicios/roles.service';
 
 
 
@@ -32,7 +36,9 @@ import { ListaUsuariosComponent } from './componentes/lista-usuarios/lista-usuar
     ListaCursosComponent,
     AbmCursoComponent,
     AbmUsuarioComponent,
-    ListaUsuariosComponent
+    ListaUsuariosComponent,
+    ListaInscripcionesComponent,
+    AbmInscripcionComponent
   ],
   imports: [
     BrowserModule,
@@ -40,8 +46,7 @@ import { ListaUsuariosComponent } from './componentes/lista-usuarios/lista-usuar
     AppMaterialModule,
     ReactiveFormsModule
   ],
-  providers: [UsuarioService],
+  providers: [UsuarioService,CursoService,RolesService],//providers: [UsuarioService,CursoService,RolesService], hace que se cree una unica instancia de cada servicio en toda la aplicacion
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-//providers: [AlumnoService], hace que se cree una unica instancia del servicio en toda la aplicacion

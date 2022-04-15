@@ -11,7 +11,7 @@ import { Usuario } from 'src/app/clases/usuario';
 })
 export class AbmCursoComponent implements OnInit {
 
-  curso:Curso=new Curso(0,"","",0,0,0,new Date());
+  curso:Curso=new Curso(0,"","",0,0,0,new Date(),0);
   titulo:string="Editar";
   edita:boolean=true;
   profesores:Usuario[]=[];
