@@ -19,6 +19,7 @@ export class AbmCursoComponent implements OnInit {
   constructor(public refDialog: MatDialogRef<AbmCursoComponent>, 
     @Inject(MAT_DIALOG_DATA) public data:{datosCurso:Curso,profesores:Usuario[]}) 
     {
+      console.log(data.profesores);
       this.profesores= data.profesores;
       if (data.datosCurso.id==0)
       {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Curso } from '../clases/curso';
 import { Usuario } from '../clases/usuario';
+import {map,filter} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root' // Aqui se pone el componente que lo necesita, en este caso todos los componentes porque se indica root
@@ -21,24 +22,33 @@ export class UsuarioService {
       new Usuario(8,"UsuarioAdmin1","Apellido8",new Date("01/01/2002"),12345678,"correo8@mail.com",123456,"1","direccion8",3),
       new Usuario(9,"UsuarioAdmin2","Apellido9",new Date("01/01/2003"),12345678,"correo9@mail.com",456789,"0","direccion9",3),
       new Usuario(10,"UsuarioUsr3","Apellido10",new Date("01/01/2004"),12345678,"correo10@mail.com",123456,"2","direccion10",4),
-      new Usuario(11,"UsuarioUsr4","Apellido11",new Date("01/01/2005"),12345678,"correo11@mail.com",456789,"2","direccion11",4)
+      new Usuario(11,"UsuarioUsr4","Apellido11",new Date("01/01/2005"),12345678,"correo11@mail.com",456789,"2","direccion11",4),
+      new Usuario(12,"UsuarioUsr5","Inactivo",new Date("01/01/2005"),12345678,"correo12@mail.com",456789,"2","direccion12",4)
   ];
 
 
   constructor() {
+    
+
        this.usuarioSubject = new Subject();
        this.usuarioObservable = new Observable((observer) => {
+         
          observer.next(this.listaUSR);
        })
   }
 
 
-   getUsuariosOBS():Observable<any>{
-    return this.usuarioObservable;
-   }
+  getUsuariosOBS():Observable<any>{
+    this.listaUSR[11].activo=false;
+  return this.usuarioObservable
+                              .pipe(
+                                map(personas => personas.filter(usuario => usuario.activo==true))
+                              );
+  }
+
 
   getUsuarios() { 
-    return this.listaUSR;
+    this.usuarioSubject.next(this.listaUSR);
   }
 
   getUsuario(id:number) {
@@ -46,7 +56,17 @@ export class UsuarioService {
   }
   getUsuariosPorRol(rolId:number) {
 
-    return this.listaUSR.filter(usuario => usuario.rol == rolId);
+    let us:Usuario[]=this.listaUSR.filter(usuario => usuario.rol != rolId)
+    for(var n=0;n<us.length;n++)
+    {
+        this.deleteUsuarioId(us[n].id);      
+    }
+
+    this.usuarioSubject.next(this.listaUSR);
+  }
+
+  getUsuariosPorRolId(rolId:number){
+    return this.listaUSR.filter(usuario => usuario.rol == rolId)
   }
 
 
@@ -61,6 +81,10 @@ export class UsuarioService {
   deleteUsuario(al:Usuario){
     this.listaUSR.splice(this.listaUSR.findIndex(x=>x.id==al.id),1);
   }
+  deleteUsuarioId(id:number){
+    this.listaUSR.splice(this.listaUSR.findIndex(x=>x.id==id),1);
+  }
+
   updateUsuario(al:Usuario){
     
     this.listaUSR[this.listaUSR.findIndex(x=>x.id==al.id)]=al;

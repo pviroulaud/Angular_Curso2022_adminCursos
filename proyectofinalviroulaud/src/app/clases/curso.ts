@@ -10,6 +10,7 @@ export class Curso
     profesorId:number=0;
     fechaInicio:Date=new Date();
     cupo:number=0;
+    activo:boolean=true;
 
     constructor(id:number,nombre:string,descripcion:string,cupo:number,totalClases:number,clasesSemanales:number,fechaInicio:Date,profesorId:number)
     {
@@ -28,5 +29,11 @@ export class Curso
     }
     setProfesorId(id:number){
         this.profesorId=id;
+    }
+    desactivarCurso(id:number){
+        this.activo=false;
+    }
+    activarCurso(id:number){
+        this.activo=true;
     }
 }

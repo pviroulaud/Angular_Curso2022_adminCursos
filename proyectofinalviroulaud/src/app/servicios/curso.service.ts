@@ -15,8 +15,24 @@ export class CursoService {
     new Curso(2, "Curso2", "Descripcion2",100,3,2,new Date(),6),
     new Curso(3, "Curso3", "Descripcion3",100,3,2,new Date(),7),
     new Curso(4, "Curso4", "Descripcion4",100,3,2,new Date(),0),
+    new Curso(5, "Curso5", "Descripcion5",100,3,2,new Date(),0)
     ];
    }
+
+
+   getCursosPromise(){
+    let p = new Promise<Curso[]>((resolve, reject) => {
+      const error = false;
+
+      if(!error){
+        resolve(this.listaCur);
+      }else{
+        reject('Hubo un error');
+      }
+    });
+
+    return p;
+  }
 
     getCursos() {
       return this.listaCur;

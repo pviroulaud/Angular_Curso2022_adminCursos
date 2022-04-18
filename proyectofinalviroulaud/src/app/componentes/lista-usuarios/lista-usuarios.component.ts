@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild,OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalConfirmacionComponent} from '../modal-confirmacion/modal-confirmacion.component';
 import { MatTable, MatTableDataSource} from '@angular/material/table'
@@ -10,6 +10,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 
 
+
 @Component({
   selector: 'app-lista-usuarios',
   templateUrl: './lista-usuarios.component.html',
@@ -17,7 +18,7 @@ import { Observable } from 'rxjs';
               '../../app.component.css'],
   providers:[UsuarioService]
 })
-export class ListaUsuariosComponent implements OnInit , AfterViewInit{
+export class ListaUsuariosComponent implements OnInit , OnDestroy, AfterViewInit{
 
   @ViewChild(MatTable, {static: true}) table!: MatTable<any>;
   @Input() tipoLista:string="Alumno";
@@ -26,12 +27,19 @@ export class ListaUsuariosComponent implements OnInit , AfterViewInit{
   listaUS: Usuario[]=[];
   tituloLista:string="Listado de Usuarios";
   rol:any=[];
-  datasource!:any[];
+  //datasource!:any[];
+  ds:any;
  
+  usuario$?:Observable<Usuario[]>;
+
+  suscripcion:any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(public dialog:MatDialog, private servicioUsuario:UsuarioService, private servicioRoles:RolesService) { }
 
+  ngOnDestroy(): void {
+    this.suscripcion.unsubscribe();
+  }
 
   ngOnInit(): void {
 
@@ -59,35 +67,38 @@ export class ListaUsuariosComponent implements OnInit , AfterViewInit{
         break;
     }
     
-  //  this.servicioUsuario.getUsuariosOBS().subscribe((datos)=>{
-  //   console.log("ev suscripcion",datos);
-  //    this.listaUS=datos;
-  //  });
-
-    this.servicioUsuario.getUsuariosOBS().subscribe((datos)=>{
+    this.usuario$=this.servicioUsuario.getUsuariosOBS()
+    this.suscripcion=this.usuario$.subscribe((datos)=>{
       this.listaUS = datos;
-      this.datasource = this.listaUS;
+      //this.datasource = this.listaUS;
+      
+      this.ds= new MatTableDataSource<Usuario>(this.listaUS);
+      this.table.renderRows();
+
+     
     })
 
-    //  this.obtenerUsuarios();
 
-    // this.dataSource= new MatTableDataSource<Usuario>(this.listaUS);
+      this.obtenerUsuarios();
+
+    
   }
 
 
 
   ngAfterViewInit() {
-   // this.dataSource.paginator = this.paginator;
+   this.ds.paginator = this.paginator;
   }
 
   
   obtenerUsuarios(){
     if(this.tipoLista=="Usuario"){
-      this.listaUS=this.servicioUsuario.getUsuarios();
+      this.servicioUsuario.getUsuarios();
+      //this.listaUS=this.servicioUsuario.getUsuarios();
     }else{
-      this.listaUS=this.servicioUsuario.getUsuariosPorRol(this.rol[0].id);
+      this.servicioUsuario.getUsuariosPorRol(this.rol[0].id);
+      //this.listaUS=this.servicioUsuario.getUsuariosPorRol(this.rol[0].id);
     }
-    
   }
 
   verUsuario(al:Usuario){
@@ -97,9 +108,11 @@ export class ListaUsuariosComponent implements OnInit , AfterViewInit{
 
       refDialog.afterClosed().subscribe(result => {
       this.servicioUsuario.updateUsuario(result);
-      this.obtenerUsuarios();
+      this.table.renderRows();
 
-      // this.dataSource.paginator = this.paginator;
+      //this.obtenerUsuarios();
+
+      this.ds.paginator = this.paginator;
       });    
   }
 
@@ -112,18 +125,14 @@ export class ListaUsuariosComponent implements OnInit , AfterViewInit{
     refDialog.afterClosed().subscribe(result => {
       this.servicioUsuario.updateUsuario(result)
       this.table.renderRows();
-      // .toPromise().then(()=>{
-      //   this.usuarios$ = this.servicioUsuario.getUsuariosOBS(); 
 
-      // });
-        
-      //console.log("Resultado update",result);
-      //this.listaUS= result;
       // this.obtenerUsuarios();
 
-      // this.dataSource.paginator = this.paginator;
+       this.ds.paginator = this.paginator;
     });    
   }
+
+
   altaUsuario()
   {
     const refDialog=this.dialog.open(AbmUsuarioComponent,{data:{datosUsr: new Usuario(0,"","",new Date(),0,"",0,"","",1),
@@ -133,19 +142,11 @@ export class ListaUsuariosComponent implements OnInit , AfterViewInit{
     refDialog.afterClosed().subscribe(result => {
       if(result!=null)
       {
-        // console.log(this.listaUS);
       this.servicioUsuario.addUsuario(result);
-        // .toPromise().then(()=>{
-        //   this.usuarios$ = this.servicioUsuario.getUsuariosOBS();
-
-        // });
-        // console.log(this.listaUS);
-        // console.log(result);
-        // this.datasource = this.listaUS;
         this.table.renderRows();
         // this.obtenerUsuarios();
 
-        // this.dataSource.paginator = this.paginator;
+         this.ds.paginator = this.paginator;
       }
       
     });
@@ -159,8 +160,9 @@ export class ListaUsuariosComponent implements OnInit , AfterViewInit{
       if(result)
       {
         this.servicioUsuario.deleteUsuario(al);
-        this.obtenerUsuarios();
-        // this.dataSource.paginator = this.paginator;  
+        this.table.renderRows();
+        //this.obtenerUsuarios();
+         this.ds.paginator = this.paginator;  
       }
     });
   }

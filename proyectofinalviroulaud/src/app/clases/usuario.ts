@@ -15,6 +15,7 @@ export class Usuario
     direccion:string="";
     rol:number=4;
     pass:string="123";
+    activo:boolean=true;
 
     constructor(id:number,nombre:string,
     apellido:string,

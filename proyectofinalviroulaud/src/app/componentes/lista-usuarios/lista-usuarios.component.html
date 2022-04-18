@@ -8,7 +8,7 @@
     </div>
     <!-- [dataSource]="listaUS" -->
     <div class="col-sm-12">
-        <table mat-table  [dataSource]="datasource" #table class="tabla" >
+        <table mat-table  [dataSource]="ds" #table class="tabla" >
             <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef> Legajo </th>
                 <td mat-cell *matCellDef="let element"> {{element.id}} </td>

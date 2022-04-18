@@ -17,8 +17,10 @@ import { MatPaginator } from '@angular/material/paginator';
   providers: [CursoService,UsuarioService]
 })
 export class ListaCursosComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatTable, {static: true}) table!: MatTable<any>;
+  dataSource:any;
+  
 
-  dataSource: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   
   
@@ -44,13 +46,26 @@ export class ListaCursosComponent implements OnInit, AfterViewInit {
 
   obtenerCursos(){
     
-    this.listaCur=this.servicioCurso.getCursos();
+    this.servicioCurso.getCursosPromise().then((data)=>{
+      this.listaCur=data;
+      this.dataSource= new MatTableDataSource<Curso>(this.listaCur);
+      this.table.renderRows();
+
+      //this.obtenerUsuarios();
+
+      this.dataSource.paginator = this.paginator;
+    })
+    .catch((err)=>{
+      console.log(err);
+    });
+
+    //this.listaCur=this.servicioCurso.getCursos();
   }
 
   altaCurso()
   {
     const refDialog=this.dialog.open(AbmCursoComponent,{data:{datosCurso:new Curso(0,"","",0,0,0,new Date(),0),
-                                                        profesores:this.servicioUsuario.getUsuariosPorRol(2)}});
+                                                        profesores:this.servicioUsuario.getUsuariosPorRolId(2)}});
 
     refDialog.afterClosed().subscribe(result => {
       if(result!=null)
@@ -64,7 +79,7 @@ export class ListaCursosComponent implements OnInit, AfterViewInit {
   }
   editarCurso(cur:Curso){
     const refDialog=this.dialog.open(AbmCursoComponent,{data:{datosCurso: new Curso(cur.id,cur.nombre,cur.descripcion,cur.cupo,cur.totalClases,cur.totalClases,cur.fechaInicio,cur.profesorId),
-                                                              profesores:this.servicioUsuario.getUsuariosPorRol(2)}});
+                                                              profesores:this.servicioUsuario.getUsuariosPorRolId(2)}});
     refDialog.afterClosed().subscribe(result => {
       this.servicioCurso.updateCurso(result);
       this.obtenerCursos();
